@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+<img width="72" height="72" alt="Icon-iOS-Default-1024x1024@1x" src="https://github.com/user-attachments/assets/fb38493c-1bd7-49ea-b4e4-9c0b752ed98a" />
+</div>
+<h1 align="center"> MiniPomo</h1>
+<div align="center">
+<img width="200" height="200" alt="Screenshot 2025-11-24 at 19 22 03" src="https://github.com/user-attachments/assets/367b141d-5ffb-4d91-810b-1f8da29c45f5" />
+<img width="200" height="200" alt="Screenshot 2025-11-24 at 19 23 06" src="https://github.com/user-attachments/assets/f99c4337-09a1-45ce-9ad8-e097da490033" />
+</div>
+
+This is a native MacOS application (compiled with Tauri) designed to help you stay focused using the Pomodoro technique. It features a clean, minimalist interface following Google's [Material Design](https://m3.material.io/) guidelines with customizable timer settings and themes.
+
+## Tech Stack
+
+This project is built using the following technologies:
+
+-   **[Tauri](https://tauri.app/)**: For building the native MacOS application bundle.
+-   **[Next.js](https://nextjs.org/)**: React framework for the user interface.
+-   **[Tailwind CSS](https://tailwindcss.com/)**: For styling and theming.
+-   **TypeScript**: For type safety and better developer experience.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+-   Node.js and pnpm installed.
+-   Rust and Cargo installed (for Tauri).
+
+### Installation
+
+1.  Clone the repository.
+2.  Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To run the application in development mode:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm tauri dev
+```
 
-## Learn More
+### Build
 
-To learn more about Next.js, take a look at the following resources:
+To build the application for production:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm tauri build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The build artifacts will be located in `src-tauri/target/release/bundle/`.
 
-## Deploy on Vercel
+## Todo
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Settings page UI revamp
+- Add more themes
+- Notification sounds
+- Add a distributable file
+- Distribute on app store
+- Add MacOS menubar support
