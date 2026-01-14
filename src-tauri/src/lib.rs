@@ -1,5 +1,5 @@
 use tauri::Manager;
-use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
+use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial, NSVisualEffectState};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -15,7 +15,7 @@ pub fn run() {
 
       #[cfg(target_os = "macos")]
       if let Some(window) = app.get_webview_window("main") {
-        apply_vibrancy(&window, NSVisualEffectMaterial::HudWindow, None, None)
+        apply_vibrancy(&window, NSVisualEffectMaterial::HudWindow, Some(NSVisualEffectState::Active), None)
           .expect("Unsupported platform! 'apply_vibrancy' is only supported on macOS");
       }
 
