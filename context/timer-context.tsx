@@ -46,7 +46,7 @@ export function TimerProvider({ children }: { children: ReactNode }) {
             else if (mode === "break") setTimeLeft(BREAK_DURATION);
             else if (mode === "breakPlus") setTimeLeft(BIG_BREAK_DURATION);
         }
-    }, [mode, TIMER_DURATION, BREAK_DURATION, BIG_BREAK_DURATION, isRunning]);
+    }, [mode, TIMER_DURATION, BREAK_DURATION, BIG_BREAK_DURATION]);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -63,8 +63,24 @@ export function TimerProvider({ children }: { children: ReactNode }) {
             // Play notification sound if enabled
             if (settings.soundEnabled) {
                 const playSound = () => {
+                    // Use Web Audio API to support volume > 100%
                     const audio = new Audio("/notification.mp3");
-                    audio.volume = settings.volume;
+
+                    // Only use GainNode if volume > 100%, otherwise use simple volume property
+                    if (settings.volume > 100) {
+                        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+                        const source = audioContext.createMediaElementSource(audio);
+                        const gainNode = audioContext.createGain();
+
+                        // Set gain (0-5 for 0-500%)
+                        gainNode.gain.value = settings.volume / 100;
+
+                        source.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                    } else {
+                        audio.volume = settings.volume / 100;
+                    }
+
                     audio.play().catch((e) => console.error("Error playing sound:", e));
                 };
 
