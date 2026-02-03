@@ -117,7 +117,11 @@ export function TimerProvider({ children }: { children: ReactNode }) {
         setIsRunning(false);
         setHasNotified(false);
         setShowComplete(false);
-        // Time update is handled by the useEffect above
+
+        // Update timeLeft immediately to avoid race conditions with the timer useEffect
+        if (newMode === "timer") setTimeLeft(TIMER_DURATION);
+        else if (newMode === "break") setTimeLeft(BREAK_DURATION);
+        else if (newMode === "breakPlus") setTimeLeft(BIG_BREAK_DURATION);
     };
 
     const handleDismiss = () => {
