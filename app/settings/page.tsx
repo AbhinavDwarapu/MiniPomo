@@ -18,8 +18,8 @@ export default function SettingsPage() {
         const updateWindowSize = async () => {
             try {
                 const appWindow = getCurrentWindow();
-                await appWindow.setMinSize(new LogicalSize(300, 620));
-                await appWindow.setSize(new LogicalSize(300, 620));
+                await appWindow.setMinSize(new LogicalSize(350, 820));
+                await appWindow.setSize(new LogicalSize(350, 820));
             } catch (error) {
                 console.error("Failed to resize window:", error);
             }
