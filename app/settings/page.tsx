@@ -91,14 +91,37 @@ export default function SettingsPage() {
                                         label="Volume"
                                         value={settings.volume}
                                         onChange={(value) => updateSettings({ volume: value })}
-                                        onValueCommit={(value) => {
+                                        onValueCommit={async (value) => {
+                                            const isTauri = typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
+
+                                            if (isTauri) {
+                                                try {
+                                                    const { invoke } = await import('@tauri-apps/api/core');
+                                                    await invoke('play_notification', { volume: value / 100 });
+                                                } catch (e) {
+                                                    console.error("Error invoking play_notification:", e);
+                                                }
+                                                return;
+                                            }
+
+                                            // Use Web Audio API to support volume > 100%
                                             const audio = new Audio("/notification.mp3");
-                                            audio.volume = value;
+                                            const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+                                            const source = audioContext.createMediaElementSource(audio);
+                                            const gainNode = audioContext.createGain();
+
+                                            // Set gain (0-5 for 0-500%)
+                                            gainNode.gain.value = value / 100;
+
+                                            source.connect(gainNode);
+                                            gainNode.connect(audioContext.destination);
+
                                             audio.play().catch(console.error);
                                         }}
                                         min={0}
-                                        max={1}
-                                        step={0.1}
+                                        max={2000}
+                                        step={10}
+                                        formatValue={(v) => `${Math.round(v)}%`}
                                     />
                                 </div>
                             )}

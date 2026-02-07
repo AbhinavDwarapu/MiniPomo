@@ -23,7 +23,7 @@ const defaultSettings: Settings = {
     bigBreakDuration: 45,
     soundEnabled: true,
     notificationEnabled: true,
-    volume: 0.5,
+    volume: 50,
     theme: 'lilac',
 };
 

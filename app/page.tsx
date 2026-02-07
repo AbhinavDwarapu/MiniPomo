@@ -26,8 +26,8 @@ export default function Home() {
     const resetWindowSize = async () => {
       try {
         const appWindow = getCurrentWindow();
-        await appWindow.setMinSize(new LogicalSize(260, 220));
-        await appWindow.setSize(new LogicalSize(260, 280));
+        await appWindow.setMinSize(new LogicalSize(250, 220));
+        await appWindow.setSize(new LogicalSize(250, 280));
       } catch (error) {
         console.error("Failed to reset window size:", error);
       }

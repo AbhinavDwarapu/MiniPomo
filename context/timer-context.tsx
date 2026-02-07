@@ -62,26 +62,38 @@ export function TimerProvider({ children }: { children: ReactNode }) {
 
             // Play notification sound if enabled
             if (settings.soundEnabled) {
-                const playSound = () => {
-                    // Use Web Audio API to support volume > 100%
-                    const audio = new Audio("/notification.mp3");
+                const playSound = async () => {
+                    // Check if running in Tauri
+                    const isTauri = typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
 
-                    // Only use GainNode if volume > 100%, otherwise use simple volume property
-                    if (settings.volume > 100) {
-                        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-                        const source = audioContext.createMediaElementSource(audio);
-                        const gainNode = audioContext.createGain();
-
-                        // Set gain (0-5 for 0-500%)
-                        gainNode.gain.value = settings.volume / 100;
-
-                        source.connect(gainNode);
-                        gainNode.connect(audioContext.destination);
+                    if (isTauri) {
+                        try {
+                            const { invoke } = await import('@tauri-apps/api/core');
+                            await invoke('play_notification', { volume: settings.volume / 100 });
+                        } catch (e) {
+                            console.error("Error invoking play_notification:", e);
+                        }
                     } else {
-                        audio.volume = settings.volume / 100;
-                    }
+                        // Fallback to Web Audio for dev/web
+                        const audio = new Audio("/notification.mp3");
 
-                    audio.play().catch((e) => console.error("Error playing sound:", e));
+                        // Only use GainNode if volume > 100%, otherwise use simple volume property
+                        if (settings.volume > 100) {
+                            const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+                            const source = audioContext.createMediaElementSource(audio);
+                            const gainNode = audioContext.createGain();
+
+                            // Set gain (0-5 for 0-500%)
+                            gainNode.gain.value = settings.volume / 100;
+
+                            source.connect(gainNode);
+                            gainNode.connect(audioContext.destination);
+                        } else {
+                            audio.volume = settings.volume / 100;
+                        }
+
+                        audio.play().catch((e) => console.error("Error playing sound:", e));
+                    }
                 };
 
                 playSound();
